@@ -6,5 +6,5 @@ Tabum is a browser based multiplayer game. One player acts as an infectious agen
 
 You can try it out at http://www.tabum.org
 
-The game has been built with Django and Angularjs by [Tom Walker](https://github.com/tomwalker/ "Tom Walker") and [Tom Walker](https://github.com/gburns1986 "Grant Burns")
+The game has been built with Django and Angularjs by [Tom Walker](https://github.com/tomwalker/ "Tom Walker") and [Grant Burns](https://github.com/gburns1986 "Grant Burns")
 
