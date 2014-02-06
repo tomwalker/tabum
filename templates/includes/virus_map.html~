@@ -1,0 +1,273 @@
+
+<strong>User to play</strong>
+
+<!-- <div ng-app="tabum" > -->
+<div>
+  <div ng-controller='RESTController'>
+
+        <hr>
+
+        <div class="row"> <!-- first row: map and area stats -->
+
+          <div class="col-md-8">
+			<h1 ng-show="first_turn">Choose your infection site</h1>
+			<h2 ng-show="first_turn">Chosen: {[{ selected.firstTurnChoice }]}</h2>
+
+			<div google-chart ng-model="mapData" data='mapDisplayed' 
+				 mapoptions='mapDisplayOptions' selected='selected' 
+				 first='first_turn' hteams='healthTeams' 
+				 dfr='deployFieldResearcher' eoh='effect_on_health'
+				 healthplayer='health' dct='deployControlTeam'
+				 drt='deployCureTeam'>
+			</div>
+
+			<button ng-click='toggleMap()' >Toggle map</button>	
+
+			<p ng-show="health.field_researchers">
+			  <button class="btn" 
+					  ng-class="{true: 'btn-primary', false: 'btn-danger'}[!deployFieldResearcher]" 
+					  ng-click="deployFieldResearcher = !deployFieldResearcher">
+				{[{!deployFieldResearcher && 'Deploy' || 'Deploying'}]} field researcher
+			  </button>
+			</p>
+			<p ng-show="health.control_team">
+			  <button class="btn" 
+					  ng-class="{true: 'btn-primary', false: 'btn-danger'}[!deployControlTeam]" 
+					  ng-click="deployControlTeam = !deployControlTeam">
+				{[{!deployControlTeam && 'Deploy' || 'Deploying'}]} control team
+			  </button>
+			</p>
+			<p ng-show="health.cure_teams">
+			  <button class="btn" 
+					  ng-class="{true: 'btn-primary', false: 'btn-danger'}[!deployCureTeam]" 
+					  ng-click="deployCureTeam = !deployCureTeam">
+				{[{!deployCureTeam && 'Deploy' || 'Deploying'}]} cure team
+			  </button>
+			</p>
+			
+			<div health-google-chart ng-model="mapData" data='mapDisplayedHealth' 
+				 mapoptions='healthMapDisplayOptions' selected='selected' 
+				 first='first_turn' hteams='healthTeams' 
+				 dfr='deployFieldResearcher' eoh='effect_on_health'
+				 healthplayer='health' dct='deployControlTeam'
+				 drt='deployCureTeam' mapbefore='mapBefore'
+				 teams='mapDataHealthPlayerTeams' obefore='optionsBefore'>
+			</div>
+			<div style="position:absolute; top:0px; width:583px; height:291px"></div>
+
+
+          </div>
+
+          <div class="col-md-4">
+                <h2>Area stats </h2>
+                <li ng-repeat='(key, value) in countries'>
+                  <strong>{[{ key }]}</strong>: 
+                  <p ng-repeat='(key1, value1) in value'>
+                        {[{ key1 }]}: {[{ value1 }]}
+                  </p>
+                </li>
+          </div>
+        </div> <!-- end of first row -->
+
+        
+        <div class="row"> <!-- start of second row: news ticker -->
+          <div class="col-sm-12">
+                <ul id="js-news" class="js-hidden">
+                  <li class="news-item">This is the 1st latest news item.</li>
+                  <li class="news-item">This is the 2nd latest news item.</li>
+                  <li class="news-item">This is the 3rd latest news item.</li>
+                  <li class="news-item">This is the 4th latest news item.</li>
+                </ul>
+          </div>
+
+        </div> <!-- end of second row -->
+
+		<div class="row"> <!-- start of third row -->
+		  <div class="virus-tech-tree">
+			<p>start</p>
+			<div virus-tech-tree data='techTreeData' vtech='virusTechTree' points='virus.points' effect='effect_on_virus' ></div>
+			<p>end</p>
+		  </div>
+		  <strong>HEALTH:</strong>
+		  <div class="virus-tech-tree">
+			<div health-tech-tree data='healthTechTreeData' htech='healthTechTree' points='health.points' effect='effect_on_health' ></div>
+		  </div>
+
+		</div> <!-- end of third row -->
+
+
+        <div class="row"> <!-- start of forth row: selectors -->
+          <div class="col-md-8"> <!-- first 8 out of 12 is for the buttons -->
+                <div class="row">
+                  
+                  <div class="col-md-3 col-md-offset-1 "> <!-- first column -->
+                        <div class="point-controller">
+                        <button ng-click='increasePoints("lethality")' type="button" class="btn btn-primary btn-xs" >
+                          <span class="glyphicon glyphicon-circle-arrow-up"></span>
+                        </button>
+
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                                <h3 class="panel-title">Lethality: {[{ virus.lethality }]}%</h3>
+                          </div>
+                          <div class="panel-body">
+
+                                <div class="progress"> <!-- progress bar -->
+                                  <div class="progress-bar progress-bar-success" style="width: {[{ virus.lethality }]}%">
+                                  </div>
+                                </div>
+
+                          </div>
+                        </div>
+
+                        <button ng-click='decreasePoints("lethality")' type="button" class="btn btn-primary btn-xs">
+                          <span class="glyphicon glyphicon-circle-arrow-down"></span>
+                        </button>
+                        <hr>
+                        </div>
+                  </div>
+
+                  <div class="col-md-3 col-md-offset-1 "> <!-- second column -->
+                        <div class="point-controller">
+                        <button ng-click='increasePoints("infectivity")' type="button" class="btn btn-primary btn-xs" >
+                          <span class="glyphicon glyphicon-circle-arrow-up"></span>
+                        </button>
+
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                                <h3 class="panel-title">Infectivity: {[{ virus.infectivity }]}%</h3>
+                          </div>
+                          <div class="panel-body">
+
+                                <div class="progress"> <!-- progress bar -->
+                                  <div class="progress-bar progress-bar-success" style="width: {[{ virus.infectivity }]}%">
+                                  </div>
+                                </div>
+
+                          </div>
+                        </div>
+
+                        <button ng-click='decreasePoints("infectivity")' type="button" class="btn btn-primary btn-xs">
+                          <span class="glyphicon glyphicon-circle-arrow-down"></span>
+                        </button>
+                        <hr>
+                        </div>
+                  </div>
+
+                  <div class="col-md-3 col-md-offset-1 "> <!-- third column -->
+                        <div class="point-controller">
+                        <button ng-click='increasePoints("shift")' type="button" class="btn btn-primary btn-xs" >
+                          <span class="glyphicon glyphicon-circle-arrow-up"></span>
+                        </button>
+
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                                <h3 class="panel-title">Shift: {[{ virus.shift  }]}%</h3>
+                          </div>
+                          <div class="panel-body">
+
+                                <div class="progress"> <!-- progress bar -->
+                                  <div class="progress-bar progress-bar-success" style="width: {[{ virus.shift  }]}%">
+                                  </div>
+                                </div>
+
+                          </div>
+                        </div>
+
+                        <button ng-click='decreasePoints("shift")' type="button" class="btn btn-primary btn-xs">
+                          <span class="glyphicon glyphicon-circle-arrow-down"></span>
+                        </button>
+                        <hr>
+                        </div>
+                  </div>
+                </div>
+          </div> <!-- end of selector column of 8 / 12 -->
+
+          <div class="col-md-4"> <!-- start of final 4 of 12 from this column -->
+                <div class="row">
+                  <div class="col-sm-8 col-sm-offset-2">
+                        <div class="row">
+                      <ul class="nav nav-pills nav-stacked">
+                                <li class="active ">
+                                  <a href="" style="background-color: purple;">
+                                        <span class="badge pull-right">
+                                          <strong>
+                                                {[{ virus.points }]}
+                                          </strong>
+                                        </span>
+                                        Points remaining for virus
+                                  </a>
+                                </li>
+								<li class="active ">
+                                  <a href="" style="background-color: purple;">
+                                        <span class="badge pull-right">
+                                          <strong>
+                                                {[{ health.points }]}
+                                          </strong>
+                                        </span>
+                                        Points remaining for health
+                                  </a>
+                                </li>
+                          </ul>
+
+
+                        </div>
+
+
+                        <form ng-submit="endTurnFinal()" class="form-horizontal point-controller">
+
+                          <div class="form-actions point-controller">
+                                <br>
+                                <button class="btn btn-primary">End Turn</button>
+                          </div>
+                        </form>
+
+
+                  </div> <!-- end of first row containing points and resistances -->
+                </div> 
+          </div>
+        </div> 
+
+  <!-- In production use: -->
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script> -->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js"></script>
+
+  <!-- <script src="{{ STATIC_URL }}angular-jazz/app/lib/angular/angular.js"></script> -->
+  <script src="{{ STATIC_URL }}angular-jazz/app/lib/angular/angular-resource.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/lib/ui-bootstrap-tpls-0.6.0.min.js"></script>
+  <script src="http://code.angularjs.org/1.0.0rc10/angular-cookies-1.0.0rc10.js"></script>
+  <!-- <script src="{{ STATIC_URL }}angular-jazz/app/js/app.js"></script> -->
+  <script src="{{ STATIC_URL }}angular-jazz/app/js/services.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/js/controllers.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/js/gmap.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/js/healthmap.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/js/virus-tech-tree.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/js/health-tech-tree.js"></script>
+  <!-- <script src="js/filters.js"></script> -->
+  <!-- <script src="{{ STATIC_URL }}angular-jazz/app/js/directives.js"></script> -->
+
+  <!-- Choice modal -->
+
+  <div class="modal fade" id="choiceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">{[{ story }]}</h4>
+        </div>
+        <div class="modal-body">
+          {[{ question }]}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click='storechoice(answer_choices_value[0])' data-dismiss="modal">{[{ answer_choices[0] }]}</button>
+          <button type="button" class="btn btn-primary" ng-click='storechoice(answer_choices_value[1])' data-dismiss="modal">{[{ answer_choices[1] }]}</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+
+  <!-- end of choice modal -->
+
+
+  </div>

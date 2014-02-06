@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Tabum homepage{% endblock %}
+
+{% block head %}
+<link href="{{ STATIC_URL }}css/homepage.css" rel="stylesheet" type="text/css" />
+{% endblock %} <!-- end head -->
+
+
+{% block footloader %}
+
+{% endblock %} <!-- end footloader -->
+
+
+{% block content %}
+
+{% load news_tags %}
+
+<div class="full-width-image-1"
+	 style="background: url({{ STATIC_URL }}img/bg/front/{{ sample.0 }}.jpg) no-repeat center center;">
+
+  <div class="logo-wrapper">
+    <img class="img-responsive" src="{{ STATIC_URL }}img/phage_small.png" />
+  </div>
+
+</div><!-- /full-width-image-1 -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 section">
+      <h1 class="section-heading">Infect the world or save the world... </h1>
+      <p class="lead section-lead">One player controls an infective disease that is rapidly evolving and aims to wipe out humanity. Decide how your disease spreads, control its lethality, aim to infect everyone before they can stop you, then bring an end to mankind.</p>
+
+	  <div class="row">
+		<div class="col-sm-4 ">	  
+		  <img src="http://lorempixel.com/400/200/nature" alt="..." class="img-rounded img-responsive">
+		  &nbsp;
+		</div>
+		<div class="col-sm-4 ">	  
+		  <img src="http://lorempixel.com/400/200/abstract" alt="..." class="img-rounded img-responsive">
+		  &nbsp;
+		</div>
+		<div class="col-sm-4 ">	  
+		  <img src="http://lorempixel.com/400/200/food" alt="..." class="img-rounded img-responsive">
+		  &nbsp;
+		</div>
+	  </div>
+	  
+      <p class="section-paragraph"></p>
+    </div>
+  </div>
+</div>
+
+<div class="full-width-image-2"
+	 style="background: url({{ STATIC_URL }}img/bg/front/{{ sample.1 }}.jpg) no-repeat center center;">
+  <!-- box content goes here if you want to put text or a button in here -->
+    <div class="logo-wrapper">
+    <img class="img-responsive" src="{{ STATIC_URL }}img/syringe_600_300.png" />
+  </div>
+</div><!-- /full-width-image-2 -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 section">
+      <h1 class="section-heading">Control the infection</h1>
+      <p class="lead section-lead">Coordinate the response of the worlds collective healthcare agencies. Pinpoint the location of infections, try to figure out its spread and its main vector. Send teams to research the disease, send health workers to cure the infected or if it has gone to far, send in troops to control the situation.</p>
+
+	  <div class="row">
+		<div class="col-sm-4 ">	  
+		  <img src="http://lorempixel.com/400/200/nature" alt="..." class="img-rounded img-responsive">
+		  &nbsp;
+		</div>
+		<div class="col-sm-4 ">	  
+		  <img src="http://lorempixel.com/400/200/abstract" alt="..." class="img-rounded img-responsive">
+		  &nbsp;
+		</div>
+		<div class="col-sm-4 ">	  
+		  <img src="http://lorempixel.com/400/200/food" alt="..." class="img-rounded img-responsive">
+		  &nbsp;
+		</div>
+	  </div> <!-- end row -->
+	  
+    </div>
+  </div>
+</div>
+
+<div class="full-width-image-3"
+	 style="background: url({{ STATIC_URL }}img/bg/front/{{ sample.2 }}.jpg) no-repeat center center;">
+  <!-- box content goes here if you want to put text or a button in here -->
+      <div class="row">
+		<div class="col-lg-4 col-lg-offset-4">
+  			<a class="btn btn-primary btn-lg btn-block"
+			   href="{% url 'registration_register' %}"
+			   role="button">
+			  Sign up to play
+			</a>
+		</div>
+	  </div>
+
+</div><!-- /full-width-image-2 -->
+
+<!-- FOOTER -->
+<div class="container">
+  <footer>
+    <div class="row">
+      <div class="col-lg-12">
+        Copyright &copy; Tabum 2013 &middot; Facebook &middot; Twitter &middot; Google+
+      </div>
+    </div>
+  </footer>
+</div>
+
+</div><!-- /container -->
+
+{% endblock %} <!-- end content -->

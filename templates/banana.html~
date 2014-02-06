@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Play the game{% endblock %}
+
+{% block footloader %}
+
+  <!-- below is the css and JS for the ticker  -->
+  <!-- more found at http://www.jquerynewsticker.com/ -->
+  <link href="{{ STATIC_URL }}ticker/ticker-style.css" rel="stylesheet" type="text/css" />
+  <script src="{{ STATIC_URL }}ticker/jquery.ticker.js" type="text/javascript"></script>
+<script type="text/javascript">
+  $(function () {
+    $('#js-news').ticker({
+       speed : 0.1, 
+       debugMode: true, 
+       controls: true, 
+       titleText: 'Latest', 
+       displayType: 'reveal', 
+       direction: 'ltr', 
+       pauseOnItems: 2000, 
+       fadeInSpeed: 600, 
+       fadeOutSpeed: 300,
+       htmlFeed: true
+    });});	
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+{% if not user_to_play %}
+
+<h1>Next to play: {{ next_to_play }}</h1>
+
+<h2>Countries:</h2>
+{% for key1, value1 in game_map.items %}
+    <p>{{ key1 }}</p>
+	<ul>
+	{% for key2, value2 in value1.items %}
+	    <li><strong>{{ key2 }}:</strong> {{ value2 }}</li>
+	{% endfor %}
+	</ul>
+{% endfor %}
+
+<h2>Virus player</h2>
+    <p>agent: {{ virus_player.agent }}</p>
+    <p>points: {{ virus_player.points }}</p>
+    <p>shift: {{ virus_player.shift }}</p>
+    <p>infectivity: {{ virus_player.infectivity }}</p>
+    <p>lethality: {{ virus_player.lethality }}</p>
+    <p>resistances:</p> 
+	  <ul>{% for r in virus_player.resistance %}
+		<li>{{ r }}</li>
+	  {% endfor %}</ul>
+    <p>infected: {{ virus_player.infected }}</p>
+
+<h2>Health player</h2>
+{% for key1, value1 in health_player.items %}
+  <p>{{ key1 }}: {{ value1 }}</p>
+{% endfor %}
+
+{% endif %}
+
+{% if user_to_play %}
+
+
+	{% include "includes/angular-map.html" %} <!-- ang app -->
+
+
+{% endif %}
+
+{% endblock %}

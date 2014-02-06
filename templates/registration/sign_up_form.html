@@ -1,0 +1,58 @@
+{% load add_css %}
+
+<div class="row">
+  <div class="col-xs-10 col-xs-offset-1">
+    <div class="panel panel-default">
+	  <div class="panel-heading">
+		<h1>Create an account</h1>
+	  </div>
+	  <div class="panel-body">
+
+		{% if form.errors %}
+		<p class="errors">Please correct the errors below:
+		  <strong>
+			{{ form.non_field_errors }}
+		  </strong>
+		</p>
+		{% endif %}
+
+		<form method="post" action="" class="wide" role="form">
+		  {% csrf_token %}
+		  <div class="form-group">
+			<label for="id_username">Username:</label>
+			{% if form.username.errors %}
+			<p class="errors">
+			  <strong>
+				{{ form.username.errors.as_text }}
+			  </strong>
+			</p>
+			{% endif %}
+			{{ form.username|add_css:"form-control" }}
+		  </div>
+		  <div class="form-group">
+			<label for="id_email">Email address:</label>
+			{% if form.email.errors %}
+			<p class="errors">{{ form.email.errors.as_text }}</p>
+			{% endif %}
+			{{ form.email|add_css:"form-control" }}
+		  </div>
+		  <div class="form-group">
+			<label for="id_password1">Password:</label>
+			{% if form.password1.errors %}
+			<p class="errors">{{ form.password1.errors.as_text }}</p>
+			{% endif %}
+			{{ form.password1|add_css:"form-control" }}
+		  </div>
+		  <div class="form-group">
+			<label for="id_password2">Password (type again to catch typos):</label>
+			{% if form.password2.errors %}
+			<p class="errors">{{ form.password2.errors.as_text }}</p>
+			{% endif %}
+			{{ form.password2|add_css:"form-control" }}
+		  </div>
+		  <input class="btn btn-primary btn-sm" type="submit" value="Register &rarr;">
+		</form>
+	  </div>
+	</div>
+  </div>
+</div>

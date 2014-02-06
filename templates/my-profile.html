@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}View open game{% endblock %}
+
+{% block head %}
+
+{% endblock %} <!-- end head -->
+
+
+{% block footloader %}
+
+{% endblock %} <!-- end footloader -->
+
+
+{% block content %}
+
+<div class="row">
+  <div class="col-xs-10 col-xs-offset-1">
+    <div class="panel panel-primary">
+
+      <div class="panel-heading">{{ player }}</div>
+      
+      <div class="panel-body">
+	<div class="row">
+	  <div class="col-sm-10">
+            <table class="table">
+              <thead>
+		<tr>
+		  <th>Wins</th>
+		  <th>Losses</th>
+		  <th>Premium member?</th>
+		</tr>
+              </thead>
+              <tbody>
+		<tr>
+		  <td>{{ wins }}</td>
+		  <td>{{ losses }}</td>
+		  <td>{{ premium }}</td>
+		</tr>
+              </tbody>
+            </table>
+	  </div>
+	  <div class="col-sm-2">
+            <table class="table table-hover">
+              <thead>
+		<tr>
+		  <th>Friends</th>
+		</tr>
+	      </thead>
+	      <tbody>
+		{% for friend in friends.all %}
+		<tr>
+		  <td>
+		    <a href="{% url 'player_profile' friend.user.id %}"
+		       style="display: block;">
+		      {{ friend.user }}
+		    </a>
+		  </td>
+		</tr>
+		{% endfor %}
+	      </tbody>
+	    </table>
+	</div>
+      </div>
+    </div>
+
+    
+    {% if accessing_user %}
+    <div class="panel-footer">
+      <form action="{% url 'my_profile' %}" method="get">
+        <a type="button" class="btn btn-primary" href="/profile/messages/write/{{ user_checked.username }}/" >
+          Write to {{ user_checked.username }}
+        </a>
+        <input type="hidden" name="new_friend" value="{{ player.id }}">
+        <input type="submit" class="btn btn-primary pull-right" value="add to friends">
+      </form>
+    </div>
+    {% else %}
+    <div class="panel-footer">
+      <a href="{% url 'my_games' %}" type="button" class="btn btn-primary btn-sm" role="button">
+        <span class="glyphicon glyphicon-play"> </span>
+        My games
+      </a>
+
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+          <span class="glyphicon glyphicon-user"> </span>
+          Control Panel <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="{% url 'postman_inbox' %}">My Messages</a></li>
+          <li class="divider"></li>
+          <li><a href="{% url 'auth_password_change' %}">Change password</a></li>
+          <li><a href="{% url 'auth_password_reset' %}">Forgot password?</a></li>
+          <li class="divider"></li>
+          <li><a href="{% url 'logout' %}">Log out</a></li>
+        </ul>
+      </div>
+
+    </div> <!-- end footer -->
+    {% endif %}
+  </div>
+</div>
+</div>
+</div>
+
+{% endblock %} <!-- end content -->

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Play the game{% endblock %}
+
+{% block head %}
+  <!-- <script type='text/javascript' src='https://www.google.com/jsapi'></script> <\!-- necessary for google chart map -\-> -->
+  <script type='text/javascript' src='{{ STATIC_URL }}/jsapi.js'></script> <!-- change to the above when in production -->
+
+<!-- below is insert for custom css -->
+<link href="{{ STATIC_URL }}css/game.css" rel="stylesheet" type="text/css" />
+<link href="{{ STATIC_URL }}css/bootstrap.icon-large.css" rel="stylesheet" type="text/css" />
+
+{% ifequal next_to_play 'H' %}
+  <link href='http://fonts.googleapis.com/css?family=Lekton:700' rel='stylesheet' type='text/css'>
+{% endifequal  %}  
+
+{% endblock %}
+
+
+{% block footloader %}
+
+
+  <!-- code to launch modal on pageload is below -->
+  <script type="text/javascript">
+    $(window).load(function(){
+    $('#choiceModal').modal('show');
+    });
+  </script>
+
+
+
+{% endblock %}
+
+{% block content %}
+
+{% if not user_to_play %}
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <div class="panel panel-primary">
+
+      <div class="panel-heading">
+	Next to play:
+	{% ifequal next_to_play 'V' %}
+	  Infection
+	{% else %}
+	  Health player
+	{% endifequal %}
+      </div>
+	  
+      <div class="panel-body">
+	<p>
+	  We are awaiting for the other player to play their turn.
+	</p>
+	<a type="button" class="btn btn-warning btn-lg btn-block" href="{% url 'my_games' %}">
+	  My Games
+	</a>
+
+{% endif %}
+
+{% if user_to_play %}
+
+    {% ifequal next_to_play 'V' %}
+        {% include "includes/virus_map.html" %} <!-- ang app -->
+    {% endifequal  %}
+
+    {% ifequal next_to_play 'H' %}
+        {% include "includes/health_map.html" %} <!-- ang app -->
+    {% endifequal  %}
+
+
+{% endif %}
+
+{% endblock %}

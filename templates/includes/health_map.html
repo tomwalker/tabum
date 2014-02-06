@@ -1,0 +1,326 @@
+<div>
+  <div ng-controller='RESTController' ng-cloak >
+
+    <tabset vertical="false" direction="right">
+      
+      <tab style="margin-left: 10%;">
+	<tab-heading>
+	  <span class="glyphicon glyphicon-globe"></span> Map
+	</tab-heading>
+	
+	<div class="row map-row"> <!-- ticker -->
+          <div class="col-sm-9 col-sm-offset-1" >
+
+	    <div style="width: 100%; height: 37px; overflow: hidden;
+			font-family: 'Lekton', sans-serif; margin-top: 5px"
+		 class="switch well well-sm"
+		 data-ng-switch="ticker"
+		 data-ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}" >
+
+	      <div  ng-switch-when="0">
+		<p ng-bind="news[0]"></p>
+	      </div>
+
+	      <div  ng-switch-when="1">
+		<p ng-bind="news[1]"></p>
+	      </div>
+
+	      <div  ng-switch-when="2">
+		<p ng-bind="news[2]"></p>
+	      </div>
+
+	      <div  ng-switch-when="3">
+		<p ng-bind="news[3]"></p>
+	      </div>
+
+	      <div  ng-switch-when="4">
+		<p ng-bind="news[4]"></p>
+	      </div>
+
+	      <div  ng-switch-when="5">
+		<p ng-bind="news[5]"></p>
+	      </div>
+
+	      <div  ng-switch-when="6">
+		<p ng-bind="news[6]"></p>
+	      </div>
+
+	      <div  ng-switch-when="7">
+		<p ng-bind="news[7]"></p>
+	      </div>
+
+	      <div  ng-switch-when="8">
+		<p ng-bind="news[8]"></p>
+	      </div>
+
+	      <div  ng-switch-when="9">
+		<p ng-bind="news[9]"></p>
+	      </div>
+
+	      <div  ng-switch-when="10">
+		<p ng-bind="news[10]"></p>
+	      </div>
+
+	      <div  ng-switch-when="11">
+		<p ng-bind="news[11]"></p>
+	      </div>
+
+
+	    </div>
+
+
+
+	  </div>
+          <div class="col-sm-2" style="margin-bottom: -170px; z-index: 100;" >
+	    <button style="margin-top: 5px;" 
+		    type="button" class="btn btn-info pull-right btn-block"
+		    ng-click='toggleMap()' >Toggle map</button>
+
+	    <button style="margin-top: 5px; text-shadow: 0;" 
+		    type="button" class="btn pull-right btn-block" 
+		    ng-class="{true: 'btn-default', false: 'btn-danger'}[!removeTeam]"
+		    ng-click="removeTeam = !removeTeam" >
+	      {[{!removeTeam && 'Remove' || 'Removing'}]} team
+	    </button>
+
+
+	    <button style="margin-top: 5px; text-shadow: 0;" 
+		    class="btn pull-right btn-block" ng-show="health.field_researchers"
+		    ng-class="{true: 'btn-success', false: 'btn-danger'}[!deployFieldResearcher]" 
+		    ng-click="deployFieldResearcher = !deployFieldResearcher; deployControlTeam = false; deployCureTeam = false;">
+	      {[{!deployFieldResearcher && 'Deploy' || 'Deploying'}]} field researcher
+	    </button>
+
+	    <button style="margin-top: 5px; text-shadow: 0;" 
+		    class="btn pull-right btn-block" ng-show="health.control_team"
+		    ng-class="{true: 'btn-warning', false: 'btn-danger'}[!deployControlTeam]" 
+		    ng-click="deployControlTeam = !deployControlTeam; deployFieldResearcher = false; deployCureTeam = false;">
+	      {[{!deployControlTeam && 'Deploy' || 'Deploying'}]} control team
+	    </button>
+
+	    <button style="margin-top: 5px; text-shadow: 0;" 
+		    class="btn pull-right btn-block" ng-show="health.cure_teams"
+		    ng-class="{true: 'btn-primary', false: 'btn-danger'}[!deployCureTeam]" 
+		    ng-click="deployCureTeam = !deployCureTeam; deployFieldResearcher = false; deployControlTeam = false;">
+	      {[{!deployCureTeam && 'Deploy' || 'Deploying'}]} cure team
+	    </button>
+
+	  </div>			  <!-- end of ticker -->
+	</div>
+
+	<div class="row map-row" > <!-- map row -->
+
+          <div class="col-md-12">
+
+	    <div health-google-chart ng-model="mapData" data='mapDisplayedHealth' 
+		 mapoptions='healthMapDisplayOptions' selected='selected' 
+		 first='first_turn' hteams='healthTeams' remt='removeTeam'
+		 dfr='deployFieldResearcher' eoh='effect_on_health'
+		 healthplayer='health' dct='deployControlTeam'
+		 drt='deployCureTeam' mapbefore='mapBefore'
+		 teams='mapDataHealthPlayerTeams' obefore='optionsBefore'>
+	    </div>
+
+	  </div>
+
+        </div> <!-- end of map row -->
+
+      </tab>
+
+      <tab> <!-- tech tree tab -->
+
+	<tab-heading>
+	  <span class="glyphicon glyphicon-tree-deciduous"></span> Tech Tree
+	</tab-heading>
+
+
+	<div class="row map-row">
+	  <br>
+          <div class="col-md-10">
+	    <div class="virus-tech-tree">
+	      <div health-tech-tree data='healthTechTreeData' 
+		   htech='healthTechTree' points='health.points' 
+		   effect='effect_on_health' >
+	      </div>
+	    </div>
+	  </div>
+
+	  <div class="col-md-2"> <!-- right column: points etc -->
+	    <div class="row map-row">
+              <ul class="nav nav-pills nav-stacked">
+		<li class="active ">
+		  <a style="background-color: purple;">
+                    <span class="badge pull-right">
+                      <strong>
+			{[{ health.points }]}
+                      </strong>
+                    </span>
+                    Points remaining
+		  </a>
+		</li>
+		<li>
+		  <a href="#" ng-click='buyTeam("field_researchers")'>
+		    <span class="badge pull-right" ng-show="health.field_researchers">
+                      <strong>
+			{[{ health.field_researchers }]}
+                      </strong>
+                    </span>
+		    Buy field research team
+		  </a>
+		</li>
+		<li>
+		  <a href="#" ng-click='buyTeam("cure_teams")'>
+		    <span class="badge pull-right" ng-show="health.cure_teams">
+                      <strong>
+			{[{ health.cure_teams }]}
+                      </strong>
+		    </span>
+		    Buy cure team
+		  </a>
+		</li>
+		<li>
+		  <a href="#" ng-click='buyTeam("control_team")'>
+		    <span class="badge pull-right" ng-show="health.control_team">
+                      <strong>
+			{[{ health.control_team }]}
+                      </strong>
+		    </span>
+		    Buy control team
+		  </a>
+		</li>
+		<li>
+		  <div class="panel panel-default">
+		    <div class="panel-body" style="padding: 0px 5px 5px 5px;">
+
+		      <h3 class="text-center">Cure progress</h3>
+		      <div class="progress"
+			   ng-class="{true: '', false: 'progress-striped active'}[health.cure_research === 100]">
+			<div class="progress-bar progress-bar-success"  role="progressbar"
+			     aria-valuenow="{[{ health.cure_research }]}" aria-valuemin="0" aria-valuemax="100"
+			     style="width: {[{ health.cure_research }]}%">
+			  <span class="sr-only">Cure is {[{ health.cure_research }]}% Complete</span>
+			</div>
+		      </div>
+
+		      <h3 class="text-center">Disease research</h3>
+		      <div class="progress">
+			<div class="progress-bar progress-bar-primary"  role="progressbar"
+			     aria-valuenow="{[{ health.virus_understanding }]}" aria-valuemin="0" aria-valuemax="100"
+			     style="width: {[{ health.virus_understanding }]}%">
+			  <span class="sr-only">Infection understanding is {[{ health.virus_understanding }]}%</span>
+			</div>
+		      </div>
+
+		      <h3 class="text-center">Disease control</h3>
+		      <div class="progress">
+			<div class="progress-bar progress-bar-warning"  role="progressbar"
+			     aria-valuenow="{[{ health.disease_control }]}" aria-valuemin="0" aria-valuemax="100"
+			     style="width: {[{ health.disease_control }]}%">
+			  <span class="sr-only">Disease control is {[{ health.disease_control }]}%</span>
+			</div>
+		      </div>
+
+		      <h3 class="text-center">Public awareness</h3>
+		      <div class="progress">
+			<div class="progress-bar progress-bar-info"  role="progressbar"
+			     aria-valuenow="{[{ health.public_awareness }]}" aria-valuemin="0" aria-valuemax="100"
+			     style="width: {[{ health.public_awareness }]}%">
+			  <span class="sr-only">Public awareness is {[{ health.public_awareness }]}%</span>
+			</div>
+		      </div>
+		      
+		    </div>
+		  </div>
+		</li>
+
+                <li>
+		  <a href="{% url 'postman_write' %}?recipients={{ game.virus_player}}&subject=Opponent Message &body=I am currently playing you..."
+		     style="background-color: #f7f5fa;">
+		    <span class="glyphicon glyphicon-envelope pull-right"></span>
+		    Write to {{ game.virus_player }}
+		  </a>
+                </li>
+              </ul>
+
+	    </div>
+
+          </div>
+        </div> 
+      </tab>
+
+      <tab class="navbar-right" style="margin-right: 10%;">
+	<tab-heading>
+	  <span class="glyphicon glyphicon-floppy-disk"> </span> End turn
+	</tab-heading>
+
+        <div class="row map-row">
+          <div class="col-md-4 col-md-offset-4" >
+	    <div class="jumbotron jumbo-round-corners">
+	      <h1>Are you sure?</h1>
+	      <form ng-submit="endTurnFinal()" class="form-horizontal point-controller">
+			<div class="form-actions point-controller">
+              <button
+				ng-class="{true: 'btn btn-primary btn-lg btn-block disabled', false: 'btn btn-primary btn-lg btn-block'} [finalSpinner]">
+				<span ng-class="{true: 'glyphicon glyphicon-time', false: 'glyphicon glyphicon-check'} [finalSpinner]"></span> End Turn
+			  </button>
+			</div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+      </tab>
+
+    </tabset>
+
+
+
+
+
+    <!-- In production use: -->
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script> -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+
+    <!-- <script src="{{ STATIC_URL }}angular-jazz/app/lib/angular/angular.js"></script> -->
+    <script src="{{ STATIC_URL }}angular-jazz/app/lib/angular/angular-resource.js"></script>
+    <script src="{{ STATIC_URL }}angular-jazz/app/lib/ui-bootstrap-tpls-0.7.0.js"></script>
+    <script src="http://code.angularjs.org/1.0.0rc10/angular-cookies-1.0.0rc10.js"></script>
+    <script src="{{ STATIC_URL }}angular-jazz/app/js/services.js"></script>
+    <script src="{{ STATIC_URL }}angular-jazz/app/js/controllers_health.js"></script>
+    <script src="{{ STATIC_URL }}angular-jazz/app/js/healthmap.js"></script>
+    <script src="{{ STATIC_URL }}angular-jazz/app/js/health-tech-tree.js"></script>
+
+
+
+
+    <!-- Choice modal -->
+
+    <div class="modal fade" id="choiceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static" aria-hidden="true">
+      <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+	    {% if game.game_over %}
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	    {% endif %}
+            <h4 class="modal-title">{[{ story }]}</h4>
+	  </div>
+	  
+	  <div class="modal-body">
+            {[{ question }]}
+	  </div>
+	  
+	  {% if not game.game_over %}
+	  <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click='storechoice(answer_choices_value[0])' data-dismiss="modal">{[{ answer_choices[0] }]}</button>
+            <button type="button" class="btn btn-primary" ng-click='storechoice(answer_choices_value[1])' data-dismiss="modal">{[{ answer_choices[1] }]}</button>
+	  </div>
+	  {% endif %}
+	  
+	</div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <!-- end of choice modal -->
+
+
+  </div>

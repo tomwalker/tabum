@@ -1,0 +1,8 @@
+<head>
+<script language="javascript" type="text/javascript" src="../static/example1.js"></script>
+</head>
+
+<body onload="init();">
+
+<div id="infovis"></div>    
+</body>

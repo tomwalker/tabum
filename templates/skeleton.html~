@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Start a new game{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+
+{% block footloader %}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Start a new game{% endblock %}
+
+{% block head %}
+
+{% endblock %} <!-- end head -->
+
+
+{% block footloader %}
+
+{% endblock %} <!-- end footloader -->
+
+
+{% block content %}
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Opponent</th>
+      <th>Game Status</th>
+      <th>Playing As</th>
+      <th>Turn count</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for key1, value1 in games_dict.items %}
+    <tr>
+	  <td>{{ value1.opponent }}</td>
+      <td>{{ value1.status }}</td>
+      <td>{{ value1.playing_as }}</td>
+      <td>{{ value1.turn_count }}</td>
+      <td>
+		{% if value1.status == "to play" %}
+		  <a href="/play/{{ value1.id }}">play game</a>
+		{% else %}
+		  Awaiting other players turn
+		{% endif %}
+	  </td>
+    </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+
+<a type="button" class="btn btn-primary btn-lg" href="../new-game/">Create new open game</a>
+
+<a type="button" class="btn btn-primary btn-lg" href="../open-games/">View open games</a>
+<br>
+<a type="button" class="btn btn-primary btn-lg" href="../profile/messages/">Message inbox</a>
+<br>
+
+<a type="button" class="btn btn-primary btn-lg" href="../profile/logout/">Log out</a>
+
+<a type="button" class="btn btn-primary btn-lg" href="../profile/password/change/">Change password</a>
+
+<a type="button" class="btn btn-primary btn-lg" href="../profile/password/reset/">Forgot password?</a>
+
+{% endblock %} <!-- end content -->
+
+
+

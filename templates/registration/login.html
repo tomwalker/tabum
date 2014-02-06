@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block head %}
+
+{% endblock %} <!-- end head -->
+
+
+{% block footloader %}
+
+{% endblock %} <!-- end footloader -->
+
+
+{% block content %}
+
+{% load add_css %}
+
+<div class="row">
+  <div class="col-xs-10 col-xs-offset-1">
+    <div class="panel panel-default">
+	  <div class="panel-heading">
+		<h1>Log in</h1>
+	  </div>
+	  <div class="panel-body">
+
+{% if form.errors %}
+<p class="error">Incorrect, please try again</p>
+{% endif %}
+
+{% if user.is_authenticated %}
+
+<p>You are already logged in</p>
+
+{% else %}
+
+<form method="post" action="?next={{ next|default:"/" }}" role="form">
+  {% csrf_token %}
+  <div class="form-group">
+	<label for="id_username">Username:</label>
+	{% if form.username.errors %}
+	  <span class="error">
+		{{ form.username.errors|join:", " }}
+	  </span>{% endif %}
+	  {{ form.username|add_css:"form-control" }}
+  </div>
+  <div class="form-group">
+	<label for="id_password">Password:</label>
+	{% if form.password.errors %}
+	<p class="errors">{{ form.password.errors.as_text }}</p>
+	{% endif %}
+	{{ form.password|add_css:"form-control" }}
+  </div>
+  
+  <input class="btn btn-primary btn-sm" type="submit" value="Log in">  
+</form>
+
+{% endif %}
+
+{% endblock %}

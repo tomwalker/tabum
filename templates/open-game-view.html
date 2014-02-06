@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}View open game{% endblock %}
+
+{% block head %}
+
+{% endblock %} <!-- end head -->
+
+
+{% block footloader %}
+
+{% endblock %} <!-- end footloader -->
+
+
+{% block content %}
+
+<div class="row">
+  <div class="col-xs-10 col-xs-offset-1">
+    <div class="panel panel-primary">
+
+      <div class="panel-heading">Accept this game</div>
+	  
+      <div class="panel-body">
+		<form action="/accept-open-game-invite/" method="get">
+		  {% ifequal open_game.virus_player.username 'open'  %}
+		  <h2>You would play as the virus</h2>
+		  <p>Your opponent will be {{ open_game.health_player}}</p>
+		  <input type="hidden" name="accept_as" value="virus">
+		  {% endifequal %}
+
+		  {% ifequal open_game.health_player.username 'open'  %}
+		  <h2>You will play as the World Health Organisation</h2>
+		  <p>Your opponent will be: <strong> {{ open_game.virus_player}} </strong></p>
+		  <input type="hidden" name="accept_as" value="health">
+		  {% endifequal %}
+
+		  <!--  <p>Map chosen: {{ open_game.map_chosen }}</p> -->
+		  <p>Infection type: <strong>{{ open_game.virus_chosen }}</strong></p>
+		  <i>{{ open_game.virus_chosen.description }}</i>
+		  <hr>
+		  <!-- <p>health type chosen: {{ open_game.health_chosen }}</p> -->
+
+		  <input type="hidden" name="open_id" value="{{ open_game.id }}">
+		  <input type="submit" value="Play this game" class="btn btn-large btn-block btn-warning" >
+		</form>
+	  </div>
+	</div>
+  </div>
+</div>
+
+
+
+{% endblock %} <!-- end content -->

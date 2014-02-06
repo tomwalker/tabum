@@ -1,0 +1,22 @@
+from django.contrib.auth import get_user_model
+
+import factory
+
+class VirusUserFactory(factory.django.DjangoModelFactory):
+    FACTORY_FOR = get_user_model
+    FACTORY_DJANGO_GET_OR_CREATE = ('username', 'email', 'password',)
+
+    username = 'john'
+    email = 'lennon@thebeatles.com'
+    password = 'johnpassword'
+
+
+
+
+
+
+
+
+
+
+

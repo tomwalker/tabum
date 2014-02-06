@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Start a new game{% endblock %}
+
+{% block head %}
+
+{% endblock %} <!-- end head -->
+
+
+{% block footloader %}
+
+{% endblock %} <!-- end footloader -->
+
+
+{% block content %}
+
+<div class="row">
+  <div class="col-xs-10 col-xs-offset-1">
+    <form action="/create-open-game-invite/" method="get">
+      <input type="hidden" name="player" value="{{ current_user.id }}">
+	  <input type="hidden" name="player_choice" value="virus">
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title">Choose an infection type</h3>
+	</div>
+	
+	<div class="panel-body">
+	  <div data-toggle="buttons">
+		{% for virus in virus_list %}
+		<div class="col-md-2">
+		  {% if virus.avatar %}
+		    <img class="center-block" src="{{ virus.avatar.url }}">
+		  {% endif %}
+		</div>
+		<div class="col-md-10">
+	      <div class="panel panel-primary">
+			<div class="panel-heading">
+			  <h2 class="panel-title">{{ virus.agent }}
+				<div class="btn-group pull-right">
+				  <Label class="btn btn-default btn-xs">
+					<input type="radio" name="virustype" value="{{ virus.id }}"
+						   id="{{ virus.id }}" style="display: none;">
+					Choose {{ virus.agent }}
+				  </label>
+				</div>
+			  </h2>
+			</div>
+			<div class="panel-body">
+			  {{ virus.description }}
+			</div>
+	      </div>
+		</div>
+		{% endfor %}
+	  </div>
+	  <input type="submit" value="Create new game" class="btn btn-large btn-warning pull-right" >
+    </form>
+    </div>
+
+	<div class="panel-footer">
+	  <a type="button" class="btn btn-primary btn-sm" href="{% url 'open_games_list' %}">
+		<span class="glyphicon glyphicon-plus-sign"> </span>
+		Play a game as the health player
+	  </a>
+
+	  <div class="btn-group pull-right">
+		<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+		  <span class="glyphicon glyphicon-user"> </span>
+		  Control Panel <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+		  <li><a href="{% url 'my_games' %}">My games</a></li>
+		  <li class="divider"></li>
+		  <li><a href="{% url 'postman_inbox' %}">My messages</a></li>
+		  <li class="divider"></li>
+		  <li><a href="{% url 'auth_password_change' %}">Change password</a></li>
+		  <li><a href="{% url 'auth_password_reset' %}">Forgot password?</a></li>
+		  <li class="divider"></li>
+		  <li><a href="{% url 'logout' %}">Log out</a></li>
+		</ul>
+	  </div>
+
+    </div>
+
+
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %} <!-- end content -->

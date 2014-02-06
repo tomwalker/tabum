@@ -1,0 +1,27 @@
+  <strong>User to play</strong>
+
+<div ng-app="tabum" >
+  <div ng-controller='RESTController'>
+	<p>test scope
+	  <br>
+	{[{ data.turn_data.next_to_play }]} 
+	  <br>
+	{[{ loc() }]}
+	  <br>
+	{[{ dog }]}
+	</p>
+  </div>
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+  -->
+
+  <script src="{{ STATIC_URL }}angular-jazz/app/lib/angular/angular.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/lib/angular/angular-resource.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/lib/ui-bootstrap-tpls-0.5.0.min.js"></script>
+  <script src="http://code.angularjs.org/1.0.0rc10/angular-cookies-1.0.0rc10.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/js/app.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/js/services.js"></script>
+  <script src="{{ STATIC_URL }}angular-jazz/app/js/controllers.js"></script>
+  <!-- <script src="js/filters.js"></script> -->
+  <!-- <script src="js/directives.js"></script> -->
+</div>

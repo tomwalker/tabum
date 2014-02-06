@@ -1,0 +1,303 @@
+google.setOnLoadCallback(function () {    
+    angular.bootstrap(document.body, ['tabum']);
+});
+
+google.load('visualization', '1', {packages: ['geochart', 'orgchart']});
+
+
+var app = app || angular.module('tabum', 
+                                ['tabum.services', 'ngCookies', 'google-chart']);
+
+app.config(function($interpolateProvider) {
+    $interpolateProvider.startSymbol('{[{');
+    $interpolateProvider.endSymbol('}]}');
+});
+
+app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
+
+    $httpProvider.defaults.useXDomain = true;
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+}]);
+
+app.run(function ($http, $cookies) {
+    $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
+})
+
+
+app.controller('RESTController', ['$scope', '$location', '$q', 'TurnData', 
+  function ($scope, $location, $q, TurnData) {
+      var property_changes = 'test';
+      var choice_outcome = 'test2';
+      var temp = {};
+      
+      $scope.loc = function() {
+          var parts = $location.absUrl().split("/");
+          return parts[parts.length - 2];
+      };
+
+
+      $scope.dataRetrieve = function() {
+          TurnData.get({id: $scope.loc()}, function (data){
+              var extracted = angular.fromJson(data.turn_data);
+              $scope.next_to_play = extracted.next_to_play;
+              $scope.countries = extracted.countries;
+              $scope.virus = extracted.virus_player;
+              $scope.health = extracted.health_player;
+              $scope.first_turn = extracted.first_turn;
+              $scope.virusTechTree = extracted.virus_tech_tree;
+              $scope.healthTechTree = extracted.health_tech_tree;
+              $scope.turn_question = extracted.turn_question;
+
+              $scope.story = extracted.turn_question['story'];
+              $scope.question = extracted.turn_question['question'];
+              $scope.answer_choices = extracted.turn_question['choices'];
+              $scope.answer_choices_value = extracted.turn_question['choice_values']
+
+              // after data has pulled, populate the map
+              for (var key in $scope.countries) {
+                  var obj = $scope.countries[key];
+                  // console.log(obj.population.infected);
+                  // console.log("key: " + key);
+                  var infectedPercent = Math.round((obj.population.infected / 
+                                         (obj.population.infected + obj.population.healthy)) * 100);
+
+                  var deadPercent = Math.round((obj.population.dead / 
+                                                (obj.population.infected + obj.population.healthy + 
+                                                obj.population.dead)) * 100);
+                  
+                  $scope.mapDataInfectedPercent.push([key, infectedPercent, obj.population.dead]);
+                  $scope.mapDataDead.push([key, deadPercent, obj.population.dead]);
+                  $scope.mapDataInfected.push([key, obj.population.infected, obj.population.healthy]);
+				  $scope.mapDataPlain.push([key]);
+              }
+
+              // create the virus tech tree for the first time
+              for (var key in $scope.virusTechTree) {
+                  var obj = $scope.virusTechTree[key];
+                  
+                  if (obj.parent === 0){
+                      if (obj.active === true){
+                          $scope.techTreeData.addRow([{v: obj.property, f: obj.display_active }, 
+                                                      '', key]);
+                      } else{
+                          $scope.techTreeData.addRow([{v: obj.property, f: obj.display_inactive }, 
+                                                      '', key]);
+                      }
+                  } else {
+                      if (obj.active === true){
+                          $scope.techTreeData.addRow([{v: obj.property, f: obj.display_active }, 
+                                                      obj.parent, key]);
+                      } else{
+                          $scope.techTreeData.addRow([{v: obj.property, f: obj.display_inactive }, 
+                                                      obj.parent, key]);
+                      }
+                  }
+
+              } // end of virus tech tree for loop
+
+              // create the health tech tree for the first time
+              for (var key in $scope.healthTechTree) {
+                  var obj = $scope.healthTechTree[key];
+                  
+                  if (obj.parent === 0){
+                      if (obj.active === true){
+                          $scope.healthTechTreeData.addRow([{v: obj.property, f: obj.display_active }, 
+                                                      '', key]);
+                      } else{
+                          $scope.healthTechTreeData.addRow([{v: obj.property, f: obj.display_inactive }, 
+                                                      '', key]);
+                      }
+                  } else {
+                      if (obj.active === true){
+                          $scope.healthTechTreeData.addRow([{v: obj.property, f: obj.display_active }, 
+                                                      obj.parent, key]);
+                      } else{
+                          $scope.healthTechTreeData.addRow([{v: obj.property, f: obj.display_inactive }, 
+                                                      obj.parent, key]);
+                      }
+                  }
+
+              } // end of virus tech tree for loop
+
+			  $scope.mapDisplayedHealth = $scope.mapDataHealthPlayerTeams;
+			  $scope.healthMapDisplayOptions = $scope.healthMapDisplayOptionsTeams;
+
+          }); // end of the TurnData call
+
+	
+      };
+
+	  $scope.mapDataPlain = [
+		['Country']
+	  ];
+
+      $scope.healthMapDisplayOptionsPlain = {
+        region: 'world',
+        displayMode: 'regions',
+        colorAxis: {colors: ['green', 'blue', 'red']}  // colours for markers
+      };
+
+      $scope.mapDataInfectedPercent = [
+          ['Country', 'Infected %', 'dead']
+      ];
+
+      $scope.mapDataDead = [
+          ['Country', 'Dead %', 'dead number']
+      ];
+
+      $scope.mapDataInfected = [
+          ['Country', 'Infected', 'Healthy']
+      ];
+
+	  $scope.mapDataHealthPlayerTeams = [
+		  ['Country', ''],
+		  ['', 1]
+	  ];
+
+      $scope.healthMapDisplayOptionsTeams = {
+          region: 'world',
+          displayMode: 'markers',
+		  sizeAxis: {minSize:'9', maxSize:'16', minValue:'0', maxValue:'2'},
+		  enableRegionInteractivity: false,
+		  legend: 'none',
+		  tooltip: {trigger: 'none'},
+          colorAxis: {colors: ['green', 'blue', 'red']}  // colours for markers
+      };
+
+	  if ($scope.deployFieldResearcher === true){
+		  console.log('shoop de woop');
+	  }
+
+      $scope.techTreeData = new google.visualization.DataTable();
+      $scope.techTreeData.addColumn('string', 'property');
+      $scope.techTreeData.addColumn('string', 'parent');
+      $scope.techTreeData.addColumn('string', 'toolTip');
+
+      $scope.healthTechTreeData = new google.visualization.DataTable();
+      $scope.healthTechTreeData.addColumn('string', 'property');
+      $scope.healthTechTreeData.addColumn('string', 'parent');
+      $scope.healthTechTreeData.addColumn('string', 'toolTip');
+
+
+      $scope.mapDisplayed = $scope.mapDataInfectedPercent;
+      $scope.mapDisplayOptions = {colorAxis: {colors: ['green','yellow', 'orange', 'red'], } };
+
+	  $scope.mapDisplayedHealth = $scope.mapDataPlain;
+
+      $scope.toggleMap = function () {
+          var mapList = [$scope.mapDataDead, $scope.mapDataInfectedPercent, $scope.mapDataInfected];
+          var optionsList =[
+              {colorAxis: {colors: ['white', 'yellow', '#FF0000', '#C00000', '#600000', 'black']}},
+              {colorAxis: {colors: ['green','yellow', 'orange', 'red']}},
+              {colorAxis: {colors: ['green','yellow', 'orange', 'red']}, legend: 'none'}
+          ];                    // ensure order of options is same as mapList
+          var index = mapList.indexOf($scope.mapDisplayed);
+          console.log('list length:' + mapList.length);
+          if (index == mapList.length - 1){
+              $scope.mapDisplayed = mapList[0];
+              $scope.mapDisplayOptions = optionsList[0];
+          } else {
+              $scope.mapDisplayed = mapList[index + 1];
+              $scope.mapDisplayOptions = optionsList[index + 1];
+          }
+          
+      };
+
+
+      $scope.endTurnFinal = function() {
+          if ($scope.first_turn === true){
+              TurnData.finish({id: parseInt($scope.loc()),
+                                      "virus_player": angular.toJson($scope.virus),
+                                      "virus_tech": angular.toJson($scope.virusTechTree),
+                                      "health_player": angular.toJson($scope.health),
+                                      "health_tech": angular.toJson($scope.healthTechTree),
+                                      "starting_from": $scope.selected["firstTurnChoice"],
+                                      "choice_outcome": $scope.choice
+                                     });
+			  window.location.href = $location.absUrl(); // reload page for testing purposes
+          } else {
+              TurnData.finish({id: parseInt($scope.loc()),
+                                      "virus_player": angular.toJson($scope.virus),
+                                      "virus_tech": angular.toJson($scope.virusTechTree),
+                                      "health_player": angular.toJson($scope.health),
+                                      "health_tech": angular.toJson($scope.healthTechTree),
+                                      "choice_outcome": angular.toJson($scope.choice)
+                                     });
+			  window.location.href = $location.absUrl(); // reload page for testing purposes
+          }
+	  
+		  
+	  
+      };
+
+      $scope.increasePoints = function(property) {
+        if ($scope.virus.points > 0 && $scope.virus[property] < 100){
+            $scope.virus.points = $scope.virus.points - 1;
+            if (temp[property] === undefined){
+                temp[property] = $scope.virus[property];
+                console.log(temp[property]);
+            }
+            this.virus[property] = $scope.virus[property] + 1;
+        }
+      };
+
+      $scope.decreasePoints = function(property) {
+        if ($scope.virus[property] > 0 && 
+            $scope.virus[property] > temp[property]){
+            $scope.virus.points = $scope.virus.points + 1;
+            $scope.virus[property] = $scope.virus[property] - 1;
+        }
+      };
+
+
+      $scope.storechoice = function(ch) {
+          $scope.choice = ch;
+          console.log($scope.choice);
+      };
+
+      $scope.selected = '';
+
+	  $scope.healthTeams = '';
+
+	  $scope.deployFieldResearcher = false;
+	  $scope.deployControlTeam = false;
+	  $scope.deployCureTeam = false;
+
+      // running total used when ending turn
+      $scope.effect_on_virus = {
+          infectivity: 0,
+          lethality: 0,
+          shift: 0,
+          air_spread: 0,
+          land_spread: 0,
+          sea_spread: 0
+      };
+
+      $scope.effect_on_health = {
+          field_researchers: 0,
+		  field_researchers_deployed: [],
+          control_teams: 0,
+		  control_teams_deployed: [],
+		  cure_teams: 0,
+		  cure_teams_deployed: [],
+          virus_understanding: 0,
+          cure_research: 0,
+          public_awareness: 0,
+          disease_control: 0
+      };
+
+      $scope.loadData = $scope.dataRetrieve();
+
+	  $scope.$watchCollection('[deployFieldResearcher, deployControlTeam, deployCureTeam]', function(x) {
+		  if (x.indexOf(true) >= 0){
+			  console.log('woooooooo');
+			  $scope.mapBefore = $scope.mapDisplayedHealth;
+			  $scope.optionsBefore = $scope.healthMapDisplayOptions;
+			  $scope.healthMapDisplayOptions = $scope.healthMapDisplayOptionsPlain;
+			  $scope.mapDisplayedHealth = $scope.mapDataPlain;
+		  }
+	  }, true);
+
+
+}]); // end of controller
