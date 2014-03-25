@@ -1,6 +1,7 @@
 "use strict";
  
-var googleChart = googleChart || angular.module("google-chart",[]);
+var googleChart = googleChart || angular.module("google-chart",[]),
+    google;
  
 googleChart.directive("googleChart",function(){
     return{
@@ -17,7 +18,7 @@ googleChart.directive("googleChart",function(){
 			hp: '=healthplayer',
 			effect_on_health: '=eoh'
 		},
-        link: function($scope, $elem, $attr){
+        link: function($scope, $elem){
      
             var googleChart = new google.visualization.GeoChart($elem[0]);
 			
@@ -66,7 +67,7 @@ googleChart.directive("googleChart",function(){
             }, true);
 
         }
-    }
+    };							// close return
 });
 
 

@@ -12,8 +12,3 @@ services.factory('TurnData', ['$resource', '$location',
                         {finish: {method:'POST', isArray:false}});
     }
 ]);
-
-
-
-
-

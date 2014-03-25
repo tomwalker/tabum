@@ -193,7 +193,7 @@ app.controller('RESTController', ['$scope', '$location', '$timeout', 'TurnData',
       $scope.deployControlTeam = false;
       $scope.deployCureTeam = false;
       $scope.removeTeam = false;
-	  $scope.finalSpinner = false;
+      $scope.finalSpinner = false;
 
       $scope.buyTeam = function(type) {
           if ($scope.health.points > 0){
@@ -231,7 +231,7 @@ app.controller('RESTController', ['$scope', '$location', '$timeout', 'TurnData',
       $scope.ticker = 0;
 
       $scope.tickingOver = function () {
-          step = $timeout(function() {
+          $timeout(function() {
               var newsLength = $scope.news.length;
               if ($scope.ticker == (newsLength - 1)){
                   $scope.ticker = 0;
@@ -245,9 +245,9 @@ app.controller('RESTController', ['$scope', '$location', '$timeout', 'TurnData',
       $scope.tickingOver();
 
       $scope.endTurnFinal = function() {
-		  $scope.finalSpinner = true;
+          $scope.finalSpinner = true;
           if ($scope.first_turn === true){
-              TurnData.finish({id: parseInt($scope.loc()),
+              TurnData.finish({id: parseInt($scope.loc(), 10),
                                "virus_player": angular.toJson($scope.virus),
                                "virus_tech": angular.toJson($scope.virusTechTree),
                                "health_player": angular.toJson($scope.health),
@@ -255,20 +255,20 @@ app.controller('RESTController', ['$scope', '$location', '$timeout', 'TurnData',
                                "starting_from": $scope.selected["firstTurnChoice"],
                                "choice_outcome": $scope.choice,
                                "change": angular.toJson($scope.effect_on_health)
-                              }, function(u, getResponseHeaders){
+                              }, function(){
                                   $timeout(function() {
                                       window.location.reload();
                                   }, 3000);
                               });
           } else {
-              TurnData.finish({id: parseInt($scope.loc()),
+              TurnData.finish({id: parseInt($scope.loc(), 10),
                                "virus_player": angular.toJson($scope.virus),
                                "virus_tech": angular.toJson($scope.virusTechTree),
                                "health_player": angular.toJson($scope.health),
                                "health_tech": angular.toJson($scope.healthTechTree),
                                "choice_outcome": angular.toJson($scope.choice),
                                "change": angular.toJson($scope.effect_on_health)
-                              }, function(u, getResponseHeaders){
+                              }, function(){
                                   $timeout(function() {
                                       window.location.reload();
                                   }, 3000);
@@ -280,5 +280,3 @@ app.controller('RESTController', ['$scope', '$location', '$timeout', 'TurnData',
       $scope.loadData = $scope.dataRetrieve();
 
 }]); // end of controller
-
-

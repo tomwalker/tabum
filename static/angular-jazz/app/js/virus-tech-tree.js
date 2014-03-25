@@ -1,6 +1,7 @@
 "use strict";
 
-var googleChart = googleChart || angular.module("google-chart",[]);
+var googleChart = googleChart || angular.module("google-chart",[]),
+    google;
 
 googleChart.directive("virusTechTree",function(){
     return{
@@ -63,7 +64,7 @@ googleChart.directive("virusTechTree",function(){
                 // console.log(activatedDict);
                 // console.log(activatedThisTurn);
                 // console.log(selectedNode.property);
-                for (var i = 0; i < activatedThisTurn.length; i++){
+                for (var i = 0, ln = activatedThisTurn.length; i < ln; i++){
                     //console.log(allNodes[activatedThisTurn[i]]);
                     // console.log(allNodes[activatedThisTurn[i]]['requires']);
                     // if item requires currently selected node
@@ -105,7 +106,7 @@ googleChart.directive("virusTechTree",function(){
                             // if not, check if required nodes are active
                             var requiredNodes = selectedNode.requires;  // list of required
                             var allBelowActive = 0;
-                            for (var i = 0; i < requiredNodes.length; i++) {
+                            for (var i = 0, ln = requiredNodes.length; i < ln; i++) {
                                 var x = requiredNodes[i];
                                 if ($scope.vtech[x]['active'] === false){
                                     allBelowActive++;

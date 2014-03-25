@@ -1,6 +1,7 @@
 "use strict";
  
-var googleChart = googleChart || angular.module("google-chart",[]);
+var googleChart = googleChart || angular.module("google-chart",[]),
+    google;
  
 googleChart.directive("healthTechTree", function(){
     return{
@@ -44,13 +45,14 @@ googleChart.directive("healthTechTree", function(){
 
                 $scope.data.removeRow(nodeRowNumber);
 
+				var rowData;
                 if (node.parent === 0){
-                    var rowData = [
+                    rowData = [
                         [{v: node.property, f: node.display_inactive }, 
                          '', node.property]
                     ];                                      
                 } else{
-                    var rowData = [
+                    rowData = [
                         [{v: node.property, f: node.display_inactive }, 
                          node.parent, 
                          node.property]
@@ -58,13 +60,11 @@ googleChart.directive("healthTechTree", function(){
                 }
                 $scope.data.insertRows(nodeRowNumber, rowData); 
                 healthGoogleOrgChart.setSelection();
-                //console.log($scope.data);
             }
             
 
             function requiredCheck(selectedNode, allNodes) {
-                for (var i = 0; i < activatedThisTurnHealth.length; i++){
-                    // console.log(allNodes[activatedThisTurnHealth[i]]['requires']);
+                for (var i = 0, ln = activatedThisTurnHealth.length; i < ln; i++){
                     // if item requires currently selected node
                     if (allNodes[activatedThisTurnHealth[i]]['requires'] !== '') {
                         if (allNodes[activatedThisTurnHealth[i]]['requires'].indexOf(selectedNode.property) >= 0){
@@ -94,7 +94,6 @@ googleChart.directive("healthTechTree", function(){
                         if (activatedThisTurnHealth.indexOf(selectedNode['property']) >= 0) {
 
                             removeNode(selectedNode, nodeKey, nodeRowNumber);
-                            //console.log(selectedNode);
                             // for each item in activatedThisTurn
                             requiredCheck(selectedNode, allNodes);
                             // change to inactive, refund points, remove effect_on
@@ -103,7 +102,7 @@ googleChart.directive("healthTechTree", function(){
                             // if not, check if required nodes are active
                             var requiredNodes = selectedNode.requires;  // list of required
                             var allBelowActive = 0;
-                            for (var i = 0; i < requiredNodes.length; i++) {
+                            for (var i = 0, ln = requiredNodes.length; i < ln; i++) {
                                 var x = requiredNodes[i];
                                 if ($scope.htech[x]['active'] === false){
                                     allBelowActive++;
@@ -143,13 +142,15 @@ googleChart.directive("healthTechTree", function(){
 
                                     $scope.data.removeRow(nodeRowNumber);
 
+									var rowData;
+									
                                     if (selectedNode.parent === 0){
-                                        var rowData = [
+                                        rowData = [
                                             [{v: selectedNode.property, f: selectedNode.display_active }, 
                                              '', selectedNode.property]
                                         ];                                      
                                     } else{
-                                        var rowData = [
+                                        rowData = [
                                             [{v: selectedNode.property, f: selectedNode.display_active }, 
                                              selectedNode.parent, 
                                              selectedNode.property]

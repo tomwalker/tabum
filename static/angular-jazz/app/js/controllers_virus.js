@@ -145,12 +145,12 @@ app.controller('VirusController', ['$scope', '$location', '$q', '$timeout', 'Tur
           }
           
       };
-	  $scope.finalSpinner = false;
+      $scope.finalSpinner = false;
 
       $scope.endTurnFinal = function() {
-		  $scope.finalSpinner = true;		  
+          $scope.finalSpinner = true;         
           if ($scope.first_turn === true){
-              TurnData.finish({id: parseInt($scope.loc()),
+              TurnData.finish({id: parseInt($scope.loc(), 10),
                                "virus_player": angular.toJson($scope.virus),
                                "virus_tech": angular.toJson($scope.virusTechTree),
                                "health_player": angular.toJson($scope.health),
@@ -158,7 +158,7 @@ app.controller('VirusController', ['$scope', '$location', '$q', '$timeout', 'Tur
                                "starting_from": $scope.selected["firstTurnChoice"],
                                "choice_outcome": $scope.choice,
                                "change": angular.toJson($scope.effect_on_virus)
-			                  }, function(u, getResponseHeaders){
+                              }, function(){
                                   $timeout(function() {
                                       window.location.reload();
                                   }, 3000);
@@ -171,7 +171,7 @@ app.controller('VirusController', ['$scope', '$location', '$q', '$timeout', 'Tur
                                "health_tech": angular.toJson($scope.healthTechTree),
                                "choice_outcome": angular.toJson($scope.choice),
                                "change": angular.toJson($scope.effect_on_virus)
-                              }, function(u, getResponseHeaders){
+                              }, function(){
                                   $timeout(function() {
                                       window.location.reload();
                                   }, 3000);
